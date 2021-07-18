@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:steam_app/model/food.dart';
 
 void main() {
   runApp(MyApp());
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
 }
 
 class LoginScreen extends StatelessWidget {
-  String _name = '';
+  String phoneNumber = '';
 
   @override
   Widget build(BuildContext context) {
@@ -43,25 +44,97 @@ class LoginScreen extends StatelessWidget {
                 labelText: 'Phone Number',
               ),
               onChanged: (String value) {
-                _name = value;
+                phoneNumber = value;
               },
             ),
           ),
           SizedBox(height: 20),
           ElevatedButton(
             onPressed: () {
-              showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      content: Text('Hello, $_name'),
-                    );
-                  });
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return HomeScreen();
+              }));
             },
             child: Text('Submit'),
           )
         ],
       ),
     ));
+  }
+}
+
+class HomeScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(
+            Icons.menu,
+            color: Colors.white,
+          ),
+          onPressed: () {},
+        ),
+        title: Text('Steamy'),
+      ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Hi, Welcome'),
+                    Text(
+                      'Your Points : 100',
+                      style: TextStyle(color: Colors.blueAccent),
+                    )
+                  ],
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 24.0, bottom: 16.0),
+                  child: Text(
+                    'Your Washing Will Be Finish In',
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                Text(
+                  '05:00',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 24.0, bottom: 24.0),
+                  child: Text(
+                    'You will be noticed when your washing completed, so stay calm and just wait. Please enjoy the meals in our cozy restaurant!',
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                Text(
+                  'Enjoying Meals',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                // Container(
+                //   margin: EdgeInsets.only(top: 16.0),
+                //   height: 150,
+                //   child: ListView(
+                //     scrollDirection: Axis.horizontal,
+                //     children: foods.map((food) {
+                //       return Container(
+                //         height: 250,
+                //         child: Image.network('${food.image}'),
+                //       );
+                //     }).toList(),
+                //   ),
+                // ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
