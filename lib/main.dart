@@ -172,15 +172,7 @@ class HomeScreen extends StatelessWidget {
                   child: ListView(
                     scrollDirection: Axis.horizontal,
                     children: meals.map((meal) {
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: ClipRRect(
-                            borderRadius: BorderRadius.circular(12.0),
-                            child: Image.network(
-                              '${meal.image}',
-                              fit: BoxFit.fill,
-                            )),
-                      );
+                      return BiggerImage(image: '${meal.image}');
                     }).toList(),
                   ),
                 ),
@@ -207,6 +199,47 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class BiggerImage extends StatefulWidget {
+  final String image;
+
+  const BiggerImage({required this.image});
+
+  @override
+  BiggerImageState createState() => BiggerImageState();
+}
+
+class BiggerImageState extends State<BiggerImage> {
+  double imageSize = 200.0;
+  bool isZoom = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        setState(() {
+          isZoom = !isZoom;
+          if(isZoom){
+            imageSize = 300.0; 
+          }else{
+            imageSize = 200.0;
+          }
+        });
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ClipRRect(
+            borderRadius: BorderRadius.circular(12.0),
+            child: Image.network(
+              '${widget.image}',
+              width: imageSize,
+              height: imageSize,
+              fit: BoxFit.fill,
+            )),
       ),
     );
   }
