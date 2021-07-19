@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:steam_app/model/food.dart';
+import 'package:steam_app/model/drink.dart';
+import 'package:steam_app/model/meal.dart';
 
 void main() {
   runApp(MyApp());
@@ -114,22 +115,46 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'Enjoying Meals',
+                  'Meals',
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
-                // Container(
-                //   margin: EdgeInsets.only(top: 16.0),
-                //   height: 150,
-                //   child: ListView(
-                //     scrollDirection: Axis.horizontal,
-                //     children: foods.map((food) {
-                //       return Container(
-                //         height: 250,
-                //         child: Image.network('${food.image}'),
-                //       );
-                //     }).toList(),
-                //   ),
-                // ),
+                Container(
+                  margin: EdgeInsets.only(top: 16.0, bottom: 16.0),
+                  height: 150,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: meals.map((meal) {
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ClipRRect(
+                            borderRadius: BorderRadius.circular(12.0),
+                            child: Image.network(
+                              '${meal.image}',
+                              fit: BoxFit.fill,
+                            )),
+                      );
+                    }).toList(),
+                  ),
+                ),
+                Text(
+                  'Drinks',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 16.0),
+                  height: 150,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: drinks.map((drink) {
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ClipRRect(
+                            borderRadius: BorderRadius.circular(12.0),
+                            child: Image.network('${drink.image}')),
+                      );
+                    }).toList(),
+                  ),
+                ),
               ],
             ),
           ),
