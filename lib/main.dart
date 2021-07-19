@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:steam_app/model/drink.dart';
 import 'package:steam_app/model/meal.dart';
+import 'package:steam_app/model/vehicle.dart';
 
 void main() {
   runApp(MyApp());
@@ -65,18 +66,51 @@ class LoginScreen extends StatelessWidget {
 }
 
 class HomeScreen extends StatelessWidget {
+  String phoneNumber = "0829321299";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(
-            Icons.menu,
-            color: Colors.white,
-          ),
-          onPressed: () {},
-        ),
         title: Text('Steamy'),
+      ),
+      drawer: Drawer(
+        // Add a ListView to the drawer. This ensures the user can scroll
+        // through the options in the drawer if there isn't enough vertical
+        // space to fit everything.
+        child: ListView(
+          // Important: Remove any padding from the ListView.
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+              child: Center(
+                  child: Text(
+                'No Hp : $phoneNumber',
+                style: TextStyle(color: Colors.white),
+              )),
+            ),
+            ListTile(
+              title: Text('Washing History'),
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return WashingHistoryScreen();
+                }));
+              },
+            ),
+            ListTile(
+              title: Text('Log Out'),
+              onTap: () {
+                // Update the state of the app
+                // ...
+                // Then close the drawer
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -91,7 +125,9 @@ class HomeScreen extends StatelessWidget {
                     Text('Hi, Welcome'),
                     Text(
                       'Your Points : 100pts',
-                      style: TextStyle(color: Colors.blueAccent, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                          color: Colors.blueAccent,
+                          fontWeight: FontWeight.bold),
                     )
                   ],
                 ),
@@ -161,5 +197,78 @@ class HomeScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class WashingHistoryScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Text('Washing History'),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ListView.builder(
+            itemBuilder: (context, index) {
+              final Vehicle vehicle = vehicles[index];
+              return Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        children: [
+                          Container(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                '${vehicle.date}',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                            decoration: BoxDecoration(
+                                color: Colors.blue,
+                                shape: BoxShape.rectangle,
+                                borderRadius: BorderRadius.circular(8.0)),
+                          ),
+                          Container(
+                              margin: EdgeInsets.only(top: 8.0, bottom: 8.0),
+                              child: Text(
+                                  '${vehicle.policyNumber}',
+                              style: TextStyle(fontWeight: FontWeight.bold),)),
+                          Text('Duration : ${vehicle.duration}'),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Column(
+                            children: [
+                              Text(
+                                'Congratulations,',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                'You Got This Points',
+                                style: TextStyle(fontSize: 8),
+                              ),
+                            ],
+                          ),
+                          Text(
+                            '${vehicle.point}',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 32),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              );
+            },
+            itemCount: vehicles.length,
+          ),
+        ));
   }
 }
