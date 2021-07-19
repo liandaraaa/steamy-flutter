@@ -90,8 +90,8 @@ class HomeScreen extends StatelessWidget {
                   children: [
                     Text('Hi, Welcome'),
                     Text(
-                      'Your Points : 100',
-                      style: TextStyle(color: Colors.blueAccent),
+                      'Your Points : 100pts',
+                      style: TextStyle(color: Colors.blueAccent, fontWeight: FontWeight.bold),
                     )
                   ],
                 ),
