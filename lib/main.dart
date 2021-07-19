@@ -53,9 +53,19 @@ class LoginScreen extends StatelessWidget {
           SizedBox(height: 20),
           ElevatedButton(
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return HomeScreen();
-              }));
+              if (phoneNumber.isEmpty) {
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        content: Text('Please input your phone number'),
+                      );
+                    });
+              } else {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return HomeScreen(phoneNumber);
+                }));
+              }
             },
             child: Text('Submit'),
           )
@@ -66,7 +76,9 @@ class LoginScreen extends StatelessWidget {
 }
 
 class HomeScreen extends StatelessWidget {
-  String phoneNumber = "0829321299";
+  final String phoneNumber;
+
+  HomeScreen(this.phoneNumber);
 
   @override
   Widget build(BuildContext context) {
@@ -124,7 +136,7 @@ class HomeScreen extends StatelessWidget {
                   children: [
                     Text('Hi, Welcome'),
                     Text(
-                      'Your Points : 100pts',
+                      'Your Points : 400pts',
                       style: TextStyle(
                           color: Colors.blueAccent,
                           fontWeight: FontWeight.bold),
@@ -236,8 +248,9 @@ class WashingHistoryScreen extends StatelessWidget {
                           Container(
                               margin: EdgeInsets.only(top: 8.0, bottom: 8.0),
                               child: Text(
-                                  '${vehicle.policyNumber}',
-                              style: TextStyle(fontWeight: FontWeight.bold),)),
+                                '${vehicle.policyNumber}',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              )),
                           Text('Duration : ${vehicle.duration}'),
                         ],
                       ),
