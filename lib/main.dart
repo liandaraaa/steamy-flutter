@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_countdown_timer/countdown_timer_controller.dart';
+import 'package:flutter_countdown_timer/current_remaining_time.dart';
+import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:steam_app/model/drink.dart';
 import 'package:steam_app/model/meal.dart';
 import 'package:steam_app/model/vehicle.dart';
@@ -77,6 +80,7 @@ class LoginScreen extends StatelessWidget {
 
 class HomeScreen extends StatelessWidget {
   final String phoneNumber;
+  int endTime = DateTime.now().millisecondsSinceEpoch + 1000 * 30;
 
   HomeScreen(this.phoneNumber);
 
@@ -100,7 +104,7 @@ class HomeScreen extends StatelessWidget {
               ),
               child: Center(
                   child: Text(
-                'No Hp : $phoneNumber',
+                'Phone Number : $phoneNumber',
                 style: TextStyle(color: Colors.white),
               )),
             ),
@@ -125,82 +129,131 @@ class HomeScreen extends StatelessWidget {
         ),
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+        child: WashingTimer(timer: endTime),
+      ),
+    );
+  }
+}
+
+class WashingTimer extends StatefulWidget {
+  final int timer;
+
+  const WashingTimer({required this.timer});
+
+  @override
+  State createState() => WashingTimerStates();
+}
+
+class WashingTimerStates extends State<WashingTimer>
+    with TickerProviderStateMixin {
+  late CountdownTimerController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = CountdownTimerController(endTime: widget.timer, onEnd: onEnd);
+  }
+
+  void onEnd() {
+    print('onEnd');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Hi, Welcome'),
-                    Text(
-                      'Your Points : 400pts',
-                      style: TextStyle(
-                          color: Colors.blueAccent,
-                          fontWeight: FontWeight.bold),
-                    )
-                  ],
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 24.0, bottom: 16.0),
-                  child: Text(
-                    'Your Washing Will Be Finish In',
-                    textAlign: TextAlign.center,
-                  ),
-                ),
+                Text('Hi, Welcome'),
                 Text(
-                  '05:00',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 24.0, bottom: 24.0),
-                  child: Text(
-                    'You will be noticed when your washing completed, so stay calm and just wait. Please enjoy the meals in our cozy restaurant!',
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                Text(
-                  'Meals',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 16.0, bottom: 16.0),
-                  height: 150,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: meals.map((meal) {
-                      return BiggerImage(image: '${meal.image}');
-                    }).toList(),
-                  ),
-                ),
-                Text(
-                  'Drinks',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 16.0),
-                  height: 150,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: drinks.map((drink) {
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: ClipRRect(
-                            borderRadius: BorderRadius.circular(12.0),
-                            child: Image.network('${drink.image}')),
-                      );
-                    }).toList(),
-                  ),
-                ),
+                  'Your Points : 400pts',
+                  style: TextStyle(
+                      color: Colors.blueAccent, fontWeight: FontWeight.bold),
+                )
               ],
             ),
-          ),
+            Container(
+              margin: EdgeInsets.only(top: 24.0, bottom: 16.0),
+              child: Text(
+                'Your Washing Will Be Finish In',
+                textAlign: TextAlign.center,
+              ),
+            ),
+            CountdownTimer(
+              controller: controller,
+              onEnd: onEnd,
+              endTime: widget.timer,
+              widgetBuilder: (context, CurrentRemainingTime? time) {
+                if (time == null) {
+                  return ElevatedButton(
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                content: Text('Thank You'),
+                              );
+                            });
+                      },
+                      child: Text('Complete Payment'));
+                }
+                return Text(
+                  '${time.min ?? 00} : ${time.sec}',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
+                );
+              },
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 24.0, bottom: 24.0),
+              child: Text(
+                'You will be noticed when your washing completed, so stay calm and just wait. Please enjoy the meals in our cozy restaurant!',
+                textAlign: TextAlign.center,
+              ),
+            ),
+            Text(
+              'Meals',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 16.0, bottom: 16.0),
+              height: 150,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: meals.map((meal) {
+                  return BiggerImage(image: '${meal.image}');
+                }).toList(),
+              ),
+            ),
+            Text(
+              'Drinks',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 16.0),
+              height: 150,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: drinks.map((drink) {
+                  return BiggerImage(image: '${drink.image}');
+                }).toList(),
+              ),
+            ),
+          ],
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 }
 
@@ -223,9 +276,9 @@ class BiggerImageState extends State<BiggerImage> {
       onTap: () {
         setState(() {
           isZoom = !isZoom;
-          if(isZoom){
-            imageSize = 300.0; 
-          }else{
+          if (isZoom) {
+            imageSize = 300.0;
+          } else {
             imageSize = 200.0;
           }
         });
