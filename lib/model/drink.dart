@@ -7,11 +7,11 @@ class Drink {
 var drinks = [
   Drink(
       image:
-          'https://cdn-a.william-reed.com/var/wrbm_gb_food_pharma/storage/images/publications/food-beverage-nutrition/beveragedaily.com/article/2020/03/31/beverage-webinar-today-what-drinks-do-consumers-want/10866454-1-eng-GB/Beverage-webinar-today-What-drinks-do-consumers-want_wrbm_large.jpg'),
+          'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/summerdrinksnew-1625162604.jpg?crop=1.00xw:1.00xh;0,0&resize=980:*'),
   Drink(
       image:
           'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/ice-tea-royalty-free-image-1621872849.jpg?resize=768:*'),
   Drink(
       image:
-          'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/glass-of-carbonated-water-royalty-free-image-1621872879.jpg?resize=768:*'),
+          'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/drink-1615838581.jpg?crop=0.877xw:1.00xh;0.0363xw,0&resize=980:*'),
 ];
